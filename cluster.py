@@ -23,11 +23,13 @@ for key in os.environ.keys():
         nodes.append(os.environ[key])
 if len(nodes) > 0:
     networkConnectors = ET.SubElement(broker, 'networkConnectors')
-    networkConnector = ET.SubElement(networkConnectors, 'networkConnector')
-    networkConnector.set('uri', 'static:(%s)' % ','.join(nodes))
-    networkConnector.set('duplex', 'true')
-    networkConnector.set('decreaseNetworkConsumerPriority', 'false')
-    networkConnector.set('networkTTL', '2')
-    networkConnector.set('dynamicOnly', 'true')
+    for node in nodes:
+        networkConnector = ET.SubElement(networkConnectors, 'networkConnector')
+        networkConnector.set('name', node.split('_')[0])
+        networkConnector.set('uri', 'static:(%s)' % node)
+        networkConnector.set('duplex', 'true')
+        networkConnector.set('decreaseNetworkConsumerPriority', 'false')
+        networkConnector.set('networkTTL', '2')
+        networkConnector.set('dynamicOnly', 'true')
 
 tree.write('/opt/activemq/conf/activemq.xml')

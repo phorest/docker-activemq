@@ -9,7 +9,8 @@ RUN apt-get update && apt-get install -y \
 |   tar zxv -C /root \
 &&  /root/apache-activemq-5.13.0/bin/activemq create /opt/activemq
 
-COPY cluster.py /
+COPY . /
 EXPOSE 8161 61616 5672 61613 1883 61614
 
-CMD ["sh", "/opt/activemq/bin/activemq", "console"]
+ENTRYPOINT ["/bin/sh"]
+CMD ["/run.sh"]

@@ -37,10 +37,7 @@ docker run \
   --rm \
   --name amq2 \
   --link amq1:amq1 \
-  javierprovecho/docker-activemq \
-  python /cluster.py && \
-  cd /opt/activemq && \
-  sh bin/activemq console
+  javierprovecho/docker-activemq
 ```
 
 Launch `consumer` against `amq2`:
@@ -51,10 +48,8 @@ docker run \
   --rm \
   --link amq2:amq2 \
   --name consumer \
-  javierprovecho/activemq \
-  sh /opt/activemq/bin/activemq consumer \
-    --brokerUrl $AMQ2_PORT_61616_TCP \
-    --destination queue://foo.bar
+  javierprovecho/docker-activemq \
+  consumer.sh
 ```
 
 Launch `producer` against `amq1`:
@@ -65,10 +60,8 @@ docker run \
   --rm \
   --link amq1:amq1 \
   --name producer \
-  javierprovecho/activemq \
-  sh /opt/activemq/bin/activemq producer \
-    --brokerUrl $AMQ1_PORT_61616_TCP \
-    --destination queue://foo.bar
+  javierprovecho/docker-activemq \
+  producer.sh
 ```
 
 You can even launch `amq3` linked both to `amq1` and `amq2`:
@@ -80,10 +73,7 @@ docker run \
   --name amq3 \
   --link amq1:amq1 \
   --link amq2:amq2 \
-  javierprovecho/docker-activemq \
-  python /cluster.py && \
-  cd /opt/activemq && \
-  sh bin/activemq console
+  javierprovecho/docker-activemq
 ```
 
 By default `cluster.py` search for Docker links and modify `activemq.xml`.
