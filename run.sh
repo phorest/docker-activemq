@@ -1,4 +1,3 @@
 #!/bin/sh
-python /cluster.py
-cd /opt/activemq
+python cluster.py
 bin/activemq console

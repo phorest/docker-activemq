@@ -5,7 +5,9 @@ import xml.etree.ElementTree as ET
 ET.register_namespace('', 'http://www.springframework.org/schema/beans')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 
-tree = ET.parse('/opt/activemq/conf/activemq.xml')
+activeMqVersion = os.environ['ACTIVE_MQ_VERSION']
+configFile = '/home/activemq/apache-activemq-{}/conf/activemq.xml'.re
+tree = ET.parse(configFile)
 root = tree.getroot()
 
 broker = root.find('{http://activemq.apache.org/schema/core}broker')
@@ -25,11 +27,11 @@ if len(nodes) > 0:
     networkConnectors = ET.SubElement(broker, 'networkConnectors')
     for node in nodes:
         networkConnector = ET.SubElement(networkConnectors, 'networkConnector')
-        networkConnector.set('name', node.split('_')[0])
+        networkConnector.set('name', os.environ['HOSTNAME'])
         networkConnector.set('uri', 'static:(%s)' % node)
         networkConnector.set('duplex', 'true')
         networkConnector.set('decreaseNetworkConsumerPriority', 'false')
-        networkConnector.set('networkTTL', '2')
+        networkConnector.set('networkTTL', '5')
         networkConnector.set('dynamicOnly', 'true')
 
-tree.write('/opt/activemq/conf/activemq.xml')
+tree.write(configFile)
