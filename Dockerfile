@@ -29,6 +29,7 @@ WORKDIR /home/activemq
 USER activemq
 
 ENV ACTIVE_MQ_VERSION 5.14.0
+ENV ACTIVE_MQ_PORT 61616
 RUN curl  --output apache-mq.zip http://central.maven.org/maven2/org/apache/activemq/apache-activemq/$ACTIVE_MQ_VERSION/apache-activemq-$ACTIVE_MQ_VERSION-bin.zip && \
     unzip apache-mq.zip && \
     rm apache-mq.zip

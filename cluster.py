@@ -19,6 +19,18 @@ bean = shutdownHooks.find('{http://www.springframework.org/schema/beans}bean')
 
 bean.set('xmlns', 'http://www.springframework.org/schema/beans')
 
+
+print "-------"
+
+transportConnectors = broker.find('{http://activemq.apache.org/schema/core}transportConnectors')
+
+for transportConnector in transportConnectors:
+    print  transportConnector
+    if transportConnector.get('name') == 'openwire':
+        activeMqPort = os.environ['ACTIVE_MQ_PORT']
+        print activeMqPort
+        transportConnector.set('tcp://0.0.0.0:{}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600'.format(activeMqPort))
+
 nodes = []
 for key in os.environ.keys():
     if key.endswith('_PORT_61616_TCP'):
