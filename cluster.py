@@ -6,7 +6,7 @@ ET.register_namespace('', 'http://www.springframework.org/schema/beans')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 
 activeMqVersion = os.environ['ACTIVE_MQ_VERSION']
-configFile = '/home/activemq/apache-activemq-{}/conf/activemq.xml'.re
+configFile = '/home/activemq/apache-activemq-{}/conf/activemq.xml'.format(activeMqVersion)
 tree = ET.parse(configFile)
 root = tree.getroot()
 
