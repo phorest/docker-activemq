@@ -30,18 +30,20 @@ USER activemq
 
 ENV ACTIVE_MQ_VERSION 5.14.0
 ENV ACTIVE_MQ_PORT 61616
+ENV ACTIVE_MQ_CONSOLE_PORT 8161
 RUN curl  --output apache-mq.zip http://central.maven.org/maven2/org/apache/activemq/apache-activemq/$ACTIVE_MQ_VERSION/apache-activemq-$ACTIVE_MQ_VERSION-bin.zip && \
     unzip apache-mq.zip && \
     rm apache-mq.zip
 RUN chown -R activemq:activemq apache-activemq-$ACTIVE_MQ_VERSION
 
 WORKDIR /home/activemq/apache-activemq-$ACTIVE_MQ_VERSION/bin
+
+VOLUME /home/activemq/apache-activemq-$ACTIVE_MQ_VERSION/data
+
 RUN chmod u+x ./activemq
 
 WORKDIR /home/activemq/apache-activemq-$ACTIVE_MQ_VERSION/
 
-# ensure we have a log file to tail
-RUN mkdir -p data/
 RUN echo >> data/activemq.log
 
 COPY run.sh run.sh

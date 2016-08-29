@@ -7,10 +7,10 @@ ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
 
 activeMqVersion = os.environ['ACTIVE_MQ_VERSION']
 configFile = '/home/activemq/apache-activemq-{}/conf/activemq.xml'.format(activeMqVersion)
-tree = ET.parse(configFile)
-root = tree.getroot()
+configTree = ET.parse(configFile)
+configRoot = configTree.getroot()
 
-broker = root.find('{http://activemq.apache.org/schema/core}broker')
+broker = configRoot.find('{http://activemq.apache.org/schema/core}broker')
 broker.set('xmlns', 'http://activemq.apache.org/schema/core')
 
 shutdownHooks = broker.find('{http://activemq.apache.org/schema/core}shutdownHooks')
@@ -42,4 +42,17 @@ if len(nodes) > 0:
         networkConnector.set('networkTTL', '5')
         networkConnector.set('dynamicOnly', 'true')
 
-tree.write(configFile)
+configTree.write(configFile)
+
+webConsoleFile = '/home/activemq/apache-activemq-{}/conf/jetty.xml'.format(activeMqVersion)
+webConsoleTree = ET.parse(webConsoleFile)
+webConsoleBeans = webConsoleTree.getroot()
+
+for webConsoleBean in webConsoleBeans:
+    if webConsoleBean.get('id') == 'jettyPort':
+        for property in webConsoleBean:
+            if property.get('name') == 'port':
+                activeMqConsolePort = os.environ['ACTIVE_MQ_CONSOLE_PORT']
+                property.set('value', activeMqConsolePort)
+
+webConsoleTree.write(webConsoleFile)
