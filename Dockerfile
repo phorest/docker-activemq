@@ -25,6 +25,7 @@ WORKDIR /home/activemq
 
 ENV ACTIVE_MQ_VERSION 5.14.0
 ENV ACTIVE_MQ_PORT 61616
+ENV ACTIVE_MQ_CONSOLE_PASSWORD admin1
 ENV ACTIVE_MQ_CONSOLE_PORT 8161
 ENV ACTIVE_MQ_CONSOLE_PATH "/admin"
 RUN curl  --output apache-mq.zip http://central.maven.org/maven2/org/apache/activemq/apache-activemq/$ACTIVE_MQ_VERSION/apache-activemq-$ACTIVE_MQ_VERSION-bin.zip && \

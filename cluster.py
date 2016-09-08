@@ -72,3 +72,8 @@ for webConsoleBean in webConsoleBeans:
     update_console_path()
 
 webConsoleTree.write(webConsoleFile)
+
+consoleUsersFile = '/home/activemq/apache-activemq-{}/conf/jetty-realm.properties'.format(activeMqVersion)
+
+with open(consoleUsersFile, 'w') as f:
+    f.write('admin: {}, admin'.format(os.environ['ACTIVE_MQ_CONSOLE_PASSWORD']))
