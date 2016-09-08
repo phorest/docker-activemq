@@ -48,11 +48,27 @@ webConsoleFile = '/home/activemq/apache-activemq-{}/conf/jetty.xml'.format(activ
 webConsoleTree = ET.parse(webConsoleFile)
 webConsoleBeans = webConsoleTree.getroot()
 
-for webConsoleBean in webConsoleBeans:
+
+def update_console_port():
     if webConsoleBean.get('id') == 'jettyPort':
         for property in webConsoleBean:
             if property.get('name') == 'port':
-                activeMqConsolePort = os.environ['ACTIVE_MQ_CONSOLE_PORT']
-                property.set('value', activeMqConsolePort)
+                active_mq_console_ort = os.environ['ACTIVE_MQ_CONSOLE_PORT']
+                property.set('value', active_mq_console_ort)
+
+
+def update_console_path():
+    if webConsoleBean.get('id') == 'secHandlerCollection':
+        for property in webConsoleBean:
+            print property.get('name')
+            for handlerBean in list(property.iter()):
+                if handlerBean.get("class") == 'org.eclipse.jetty.webapp.WebAppContext':
+                    for handlerProperty in handlerBean:
+                        if handlerProperty.get('name') == 'contextPath' and handlerProperty.get('value') == '/admin':
+                            handlerProperty.set('value', os.environ['ACTIVE_MQ_CONSOLE_PATH'])
+
+for webConsoleBean in webConsoleBeans:
+    update_console_port()
+    update_console_path()
 
 webConsoleTree.write(webConsoleFile)
