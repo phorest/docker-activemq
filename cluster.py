@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import os
 import xml.etree.ElementTree as ET
+from xml.etree.ElementTree import Element
 
 ET.register_namespace('', 'http://www.springframework.org/schema/beans')
 ET.register_namespace('xsi', 'http://www.w3.org/2001/XMLSchema-instance')
@@ -26,6 +27,11 @@ for transportConnector in transportConnectors:
     if transportConnector.get('name') == 'openwire':
         activeMqPort = os.environ['ACTIVE_MQ_PORT']
         transportConnector.set('uri', 'tcp://0.0.0.0:{}?maximumConnections=1000&amp;wireFormat.maxFrameSize=104857600'.format(activeMqPort))
+
+policyEntry = broker.find('{http://activemq.apache.org/schema/core}destinationPolicy/{http://activemq.apache.org/schema/core}policyMap/{http://activemq.apache.org/schema/core}policyEntries/{http://activemq.apache.org/schema/core}policyEntry')
+deadLetterStrategy = Element('ns2:deadLetterStrategy', {})
+deadLetterStrategy.append(Element('ns2:sharedDeadLetterStrategy', {'processExpired': 'false'}))
+policyEntry.append(deadLetterStrategy)
 
 nodes = []
 for key in os.environ.keys():
